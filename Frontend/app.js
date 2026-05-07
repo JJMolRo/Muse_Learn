@@ -816,16 +816,18 @@ function logout() {
   location.reload();
 }
 
+// CARGAR SESIÓN
 function cargarSesion() {
   const token = localStorage.getItem("token");
 
   if (token) {
-    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("landingPage").classList.add("hidden");
     document.getElementById("dashboard").classList.remove("hidden");
 
     const email = localStorage.getItem("email");
     document.getElementById("usuarioLogeado").textContent = email;
 
+    mostrarSeccion("inicioApp");
     obtenerUsuarios();
   }
 }
@@ -838,6 +840,17 @@ function escapeHtml(texto) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+// MOSTRAR SECCIÓN
+function mostrarSeccion(idSeccion) {
+  const secciones = document.querySelectorAll(".app-section");
+
+  secciones.forEach(seccion => {
+    seccion.classList.add("hidden");
+  });
+
+  document.getElementById(idSeccion).classList.remove("hidden");
 }
 
 activarModoCrear();

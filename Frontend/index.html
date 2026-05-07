@@ -1,73 +1,49 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Music MVP</title>
+  <title>MuseLearn</title>
 
   <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0d0d0d;
-      color: white;
-    }
-
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 25px;
-      background: #111;
-      border-bottom: 1px solid #222;
-    }
-
-    h1 {
-      color: #00ff88;
-      margin: 0;
-    }
-
-    .user-info {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
-
-    .card {
-      background: #1a1a1a;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border: none;
+    * {
       box-sizing: border-box;
     }
 
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(212, 175, 55, 0.13), transparent 35%),
+        linear-gradient(135deg, #05070a, #0c0f14);
+      color: #f2f2f2;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     button {
-      background: #00ff88;
+      background: linear-gradient(135deg, #d4af37, #b88920);
+      color: #070707;
       border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
+      padding: 11px 16px;
+      border-radius: 12px;
       cursor: pointer;
       margin-top: 10px;
-      margin-right: 5px;
-      font-weight: bold;
+      margin-right: 6px;
+      font-weight: 700;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
     }
 
     .secondary {
-      background: #444;
+      background: #2a2d35;
       color: white;
     }
 
@@ -76,8 +52,219 @@
       color: white;
     }
 
-    .hidden {
-      display: none !important;
+    input, select {
+      width: 100%;
+      padding: 13px;
+      margin: 10px 0;
+      border-radius: 12px;
+      border: 1px solid #222733;
+      background: #090b10;
+      color: white;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #d4af37;
+    }
+
+    .landing {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 50px;
+      align-items: center;
+      padding: 60px;
+    }
+
+    .landing-info {
+      max-width: 850px;
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      color: #d4af37;
+      margin: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      border-radius: 999px;
+      color: #d4af37;
+      font-size: 13px;
+      margin: 25px 0 20px;
+    }
+
+    .landing-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 58px;
+      line-height: 1.05;
+      margin: 0 0 20px;
+    }
+
+    .landing-info h2 span {
+      color: #d4af37;
+      font-style: italic;
+    }
+
+    .landing-info > p {
+      max-width: 720px;
+      color: #b7b7b7;
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 35px;
+    }
+
+    .feature-card {
+      background: rgba(15, 18, 25, 0.78);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px;
+      padding: 20px;
+    }
+
+    .feature-card strong {
+      color: #d4af37;
+      font-size: 14px;
+    }
+
+    .feature-card h3 {
+      margin: 10px 0;
+      font-size: 18px;
+    }
+
+    .feature-card p {
+      color: #aaa;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .landing-login {
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      background: rgba(15, 18, 25, 0.92);
+      border: 1px solid rgba(212, 175, 55, 0.16);
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+      margin-bottom: 20px;
+    }
+
+    #loginCard {
+      width: 100%;
+      max-width: 390px;
+    }
+
+    #loginCard h2 {
+      margin-top: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: #d4af37;
+    }
+
+    .login-text {
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    .btn-gold {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      padding: 25px;
+    }
+
+    .app-header {
+      max-width: 1200px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-header h1 {
+      font-family: 'Playfair Display', serif;
+      color: #d4af37;
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      color: #bdbdbd;
+    }
+
+    .app-layout {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 22px;
+    }
+
+    .app-nav {
+      background: rgba(15, 18, 25, 0.88);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 22px;
+      padding: 18px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+    }
+
+    .app-nav button {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      color: #d7d7d7;
+      border: 1px solid transparent;
+      margin: 4px 0;
+    }
+
+    .app-nav button:hover {
+      border-color: rgba(212,175,55,0.35);
+      color: #d4af37;
+      transform: none;
+    }
+
+    .app-content {
+      min-width: 0;
+    }
+
+    .app-section {
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      color: #d4af37;
+      font-size: 34px;
+      margin-top: 0;
     }
 
     #mensaje {
@@ -120,53 +307,62 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 15px;
+      overflow: hidden;
+      border-radius: 12px;
     }
 
     .tabla-usuarios th,
     .tabla-usuarios td {
-      padding: 10px;
-      border-bottom: 1px solid #333;
+      padding: 12px;
+      border-bottom: 1px solid #2a2d35;
       text-align: left;
     }
 
     .tabla-usuarios th {
-      color: #00ff88;
-      background: #111;
+      color: #d4af37;
+      background: #0b0d12;
     }
 
     .ejercicio-card {
-      background: #222;
-      padding: 15px;
-      border-radius: 10px;
-      margin-top: 10px;
-      border-left: 4px solid #00ff88;
+      background: #0f131a;
+      padding: 18px;
+      border-radius: 16px;
+      margin-top: 14px;
+      border-left: 4px solid #d4af37;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .ejercicio-card strong {
+      color: #d4af37;
     }
 
     .resumen-dashboard {
       display: flex;
-      gap: 10px;
-      margin: 15px 0;
+      gap: 12px;
+      margin: 18px 0;
       flex-wrap: wrap;
     }
 
     .resumen-card {
-      background: #111;
-      padding: 10px;
-      border-radius: 10px;
+      background: #0b0d12;
+      padding: 16px;
+      border-radius: 16px;
       flex: 1;
       min-width: 150px;
       text-align: center;
+      border: 1px solid rgba(255,255,255,0.06);
     }
 
     .resumen-card strong {
-      color: #00ff88;
-      font-size: 20px;
+      display: block;
+      margin-top: 6px;
+      color: #d4af37;
+      font-size: 24px;
     }
 
     .input-error {
       border: 2px solid #ff4d4d;
       background: #2a1111;
-      color: white;
     }
 
     .input-ok {
@@ -209,133 +405,251 @@
       gap: 10px;
       flex-wrap: wrap;
     }
+
+    @media (max-width: 900px) {
+      .landing {
+        grid-template-columns: 1fr;
+        padding: 30px;
+      }
+
+      .landing-info h2 {
+        font-size: 42px;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .app-nav {
+        position: static;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-<header>
-  <h1>Music MVP 🎵</h1>
+  <!-- PÁGINA DE INICIO / LOGIN -->
+  <section class="landing" id="landingPage">
+    <div class="landing-info">
+      <h1 class="brand">MuseLearn</h1>
+      <span class="badge">Aprendizaje musical guiado</span>
 
-  <div class="user-info">
-    <span id="usuarioLogeado"></span>
-    <button onclick="logout()">Cerrar sesión</button>
+      <h2>
+        Aprende música desde <span>cero</span>, paso a paso.
+      </h2>
+
+      <p>
+        MuseLearn es un prototipo educativo diseñado para ayudar a personas sin conocimientos musicales previos
+        a comprender conceptos básicos de ritmo, notas, acordes y composición musical mediante ejercicios guiados,
+        práctica con metrónomo, actividades auditivas y seguimiento del progreso.
+      </p>
+
+      <div class="features">
+        <div class="feature-card">
+          <strong>01</strong>
+          <h3>Empieza sin saber música</h3>
+          <p>Los contenidos están organizados para que cualquier usuario pueda iniciar desde conceptos básicos.</p>
+        </div>
+
+        <div class="feature-card">
+          <strong>02</strong>
+          <h3>Practica con guía</h3>
+          <p>Ritmo, audio, acordes y teoría se trabajan de forma sencilla y progresiva.</p>
+        </div>
+
+        <div class="feature-card">
+          <strong>03</strong>
+          <h3>Mide tu progreso</h3>
+          <p>El sistema registra resultados, aciertos y recomienda un nivel de práctica.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="landing-login">
+      <section class="card" id="loginCard">
+        <h2>Iniciar sesión</h2>
+        <p class="login-text">Ingresa para continuar tu proceso de práctica musical.</p>
+
+        <input id="email" placeholder="Correo electrónico">
+        <input id="password" type="password" placeholder="Contraseña">
+
+        <button class="btn-gold" onclick="hacerLogin()">Entrar a MuseLearn</button>
+      </section>
+    </div>
+  </section>
+
+  <!-- APP LOGUEADA -->
+  <section class="app-shell hidden" id="dashboard">
+    <header class="app-header">
+      <h1>MuseLearn</h1>
+
+      <div class="user-info">
+        <span id="usuarioLogeado"></span>
+        <button class="danger" onclick="logout()">Salir</button>
+      </div>
+    </header>
+
+    <div class="app-layout">
+
+      <nav class="app-nav" id="appNav">
+        <button onclick="mostrarSeccion('inicioApp')">Inicio</button>
+        <button onclick="mostrarSeccion('usuariosSection')">Usuarios</button>
+        <button onclick="mostrarSeccion('metronomoSection')">Metrónomo</button>
+        <button onclick="mostrarSeccion('ejerciciosSection')">Ejercicios</button>
+        <button onclick="mostrarSeccion('resultadosSection')">Resultados</button>
+      </nav>
+
+      <main class="app-content">
+
+        <!-- INICIO INTERNO -->
+        <section id="inicioApp" class="card app-section">
+          <h2 class="section-title">Bienvenido a MuseLearn</h2>
+          <p>
+            Este panel reúne las herramientas principales del prototipo: gestión de usuarios, metrónomo,
+            ejercicios musicales y seguimiento de resultados.
+          </p>
+
+          <div class="resumen-dashboard">
+            <div class="resumen-card">
+              <span>Ruta sugerida</span>
+              <strong>Inicio</strong>
+            </div>
+
+            <div class="resumen-card">
+              <span>Práctica</span>
+              <strong>Ritmo</strong>
+            </div>
+
+            <div class="resumen-card">
+              <span>Seguimiento</span>
+              <strong>Progreso</strong>
+            </div>
+          </div>
+        </section>
+
+        <!-- USUARIOS -->
+        <section id="usuariosSection" class="card app-section hidden">
+          <h2 class="section-title">Usuarios</h2>
+
+          <div id="mensaje" class="hidden"></div>
+
+          <h3 id="tituloFormulario">Crear usuario</h3>
+
+          <input type="hidden" id="usuarioId">
+          <input id="nombreUsuario" placeholder="Nombre">
+          <input id="emailUsuario" placeholder="Correo">
+          <input id="passwordUsuario" type="password" placeholder="Contraseña">
+
+          <button id="btnGuardar" onclick="guardarOActualizarUsuario()">Crear usuario</button>
+          <button id="btnCancelarEdicion" class="secondary hidden" onclick="cancelarEdicion()">Cancelar edición</button>
+          <button onclick="obtenerUsuarios()">Cargar usuarios</button>
+
+          <div class="resumen-dashboard">
+            <div class="resumen-card">
+              <span>Total usuarios</span>
+              <strong id="totalUsuarios">0</strong>
+            </div>
+          </div>
+
+          <input id="buscadorUsuarios" placeholder="Buscar usuario..." oninput="filtrarUsuarios()">
+
+          <div id="resultado"></div>
+        </section>
+
+        <!-- METRÓNOMO -->
+        <section id="metronomoSection" class="card app-section hidden">
+          <h2 class="section-title">Metrónomo</h2>
+
+          <p>
+            Usa esta herramienta para practicar patrones rítmicos con un pulso constante.
+          </p>
+
+          <label>BPM:</label>
+          <input type="number" id="bpm" value="80" min="40" max="200">
+
+          <button onclick="iniciarMetronomo()">Iniciar</button>
+          <button class="secondary" onclick="detenerMetronomo()">Detener</button>
+
+          <p id="estadoMetronomo">Detenido</p>
+        </section>
+
+        <!-- EJERCICIOS -->
+        <section id="ejerciciosSection" class="card app-section hidden">
+          <h2 class="section-title">Ejercicios musicales</h2>
+
+          <p>
+            Selecciona un nivel y carga ejercicios de ritmo, teoría, audio, acordes o grados musicales.
+          </p>
+
+          <select id="nivelEjercicio">
+            <option value="">Todos los niveles</option>
+            <option value="basico">Básico</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="avanzado">Avanzado</option>
+          </select>
+
+          <button onclick="obtenerEjercicios()">Cargar ejercicios</button>
+
+          <div id="listaEjercicios"></div>
+        </section>
+
+        <!-- RESULTADOS -->
+        <section id="resultadosSection" class="card app-section hidden">
+          <h2 class="section-title">Resultados</h2>
+
+          <button onclick="obtenerResultados()">Ver resultados</button>
+          <button onclick="cargarNivelRecomendado()">Practicar nivel recomendado</button>
+
+          <div class="resumen-dashboard">
+            <div class="resumen-card">
+              <span>Total respuestas</span>
+              <strong id="totalResultados">0</strong>
+            </div>
+
+            <div class="resumen-card">
+              <span>Correctas</span>
+              <strong id="totalCorrectas">0</strong>
+            </div>
+
+            <div class="resumen-card">
+              <span>Acierto</span>
+              <strong id="porcentajeAcierto">0%</strong>
+            </div>
+
+            <div class="resumen-card">
+              <span>Nivel recomendado</span>
+              <strong id="nivelRecomendado">basico</strong>
+            </div>
+          </div>
+
+          <div id="listaResultados"></div>
+          <div id="progresoUsuario"></div>
+        </section>
+
+      </main>
+    </div>
+  </section>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <div id="modalEliminar" class="modal hidden">
+    <div class="modal-contenido">
+      <h3>Confirmar eliminación</h3>
+      <p>¿Seguro que deseas eliminar este usuario?</p>
+
+      <div class="modal-botones">
+        <button class="danger" onclick="confirmarEliminar()">Sí, eliminar</button>
+        <button class="secondary" onclick="cerrarModalEliminar()">Cancelar</button>
+      </div>
+    </div>
   </div>
-</header>
 
-<main>
-
-  <section class="card" id="loginCard">
-    <h2>Login</h2>
-    <input id="email" placeholder="Correo">
-    <input id="password" type="password" placeholder="Contraseña">
-    <button onclick="hacerLogin()">Entrar</button>
-  </section>
-
-  <section class="card hidden" id="dashboard">
-    <h2>CRUD de usuarios</h2>
-
-    <div id="mensaje" class="hidden"></div>
-
-    <h3 id="tituloFormulario">Crear usuario</h3>
-
-    <input type="hidden" id="usuarioId">
-    <input id="nombreUsuario" placeholder="Nombre">
-    <input id="emailUsuario" placeholder="Correo">
-    <input id="passwordUsuario" type="password" placeholder="Contraseña">
-
-    <button id="btnGuardar" onclick="guardarOActualizarUsuario()">Crear usuario</button>
-    <button id="btnCancelarEdicion" class="secondary hidden" onclick="cancelarEdicion()">Cancelar edición</button>
-    <button onclick="obtenerUsuarios()">Cargar usuarios</button>
-
-    <div class="resumen-dashboard">
-      <div class="resumen-card">
-        <span>Total usuarios</span>
-        <strong id="totalUsuarios">0</strong>
-      </div>
-    </div>
-
-    <input id="buscadorUsuarios" placeholder="Buscar..." oninput="filtrarUsuarios()">
-
-    <div id="resultado"></div>
-  </section>
-
-  <section class="card">
-  <h2>Metrónomo</h2>
-
-  <label>BPM:</label>
-  <input type="number" id="bpm" value="80" min="40" max="200">
-
-  <button onclick="iniciarMetronomo()">Iniciar</button>
-  <button onclick="detenerMetronomo()">Detener</button>
-
-  <p id="estadoMetronomo">Detenido</p>
-</section>
-
-  <section class="card" id="ejerciciosCard">
-    <h2>Ejercicios musicales</h2>
-
-    <select id="nivelEjercicio">
-      <option value="">Todos los niveles</option>
-      <option value="basico">Básico</option>
-      <option value="intermedio">Intermedio</option>
-      <option value="avanzado">Avanzado</option>
-    </select>
-
-    <button onclick="obtenerEjercicios()">Cargar ejercicios</button>
-
-    <div id="listaEjercicios"></div>
-  </section>
-
-  <section class="card" id="resultadosCard">
-    <h2>Historial de resultados</h2>
-
-    <button onclick="obtenerResultados()">Ver resultados</button>
-    <button onclick="cargarNivelRecomendado()">Practicar nivel recomendado</button>
-
-    <div class="resumen-dashboard">
-      <div class="resumen-card">
-        <span>Total respuestas</span>
-        <strong id="totalResultados">0</strong>
-      </div>
-
-      <div class="resumen-card">
-        <span>Correctas</span>
-        <strong id="totalCorrectas">0</strong>
-      </div>
-
-      <div class="resumen-card">
-        <span>Acierto</span>
-        <strong id="porcentajeAcierto">0%</strong>
-      </div>
-
-      <div class="resumen-card">
-        <span>Nivel recomendado</span>
-        <strong id="nivelRecomendado">basico</strong>
-      </div>
-    </div>
-
-    <div id="listaResultados"></div>
-    <div id="progresoUsuario"></div>
-  </section>
-
-</main>
-
-<div id="toast" class="toast hidden"></div>
-
-<div id="modalEliminar" class="modal hidden">
-  <div class="modal-contenido">
-    <h3>Confirmar eliminación</h3>
-    <p>¿Seguro que deseas eliminar este usuario?</p>
-
-    <div class="modal-botones">
-      <button class="danger" onclick="confirmarEliminar()">Sí, eliminar</button>
-      <button class="secondary" onclick="cerrarModalEliminar()">Cancelar</button>
-    </div>
-  </div>
-</div>
-
-<script src="app.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
