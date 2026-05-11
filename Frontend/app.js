@@ -414,53 +414,7 @@ async function obtenerEjercicios() {
 
     const ejercicios = await response.json();
 
-    let html = "";
-
-    if (ejercicios.length === 0) {
-      html = "<p>No hay ejercicios para este nivel.</p>";
-    } else {
-      ejercicios.forEach(ejercicio => {
-        html += `
-          <div class="ejercicio-card">
-            <strong>${escapeHtml(ejercicio.tipo || "ejercicio").toUpperCase()}</strong><br>
-            <small>Nivel: ${escapeHtml(ejercicio.nivel || "sin nivel")}</small>
-
-            <p>${escapeHtml(ejercicio.pregunta || generarPreguntaPorDefecto(ejercicio))}</p>
-
-            ${ejercicio.audioUrl ? `
-              <audio controls style="margin:10px 0; width:100%;">
-                <source src="${escapeHtml(ejercicio.audioUrl)}" type="audio/mpeg">
-                Tu navegador no soporta audio.
-              </audio>
-            ` : ""}
-
-            ${
-              ejercicio.tipo === "ritmo"
-                ? `
-                  <div style="margin-top:10px;">
-                    <p style="color:#aaa;">🎵 Practica con metrónomo</p>
-                    ${renderizarRitmo(ejercicio.contenido || "")}
-                  </div>
-                `
-                : `
-                  <input 
-                    id="respuesta-${ejercicio.id}" 
-                    placeholder="Escribe tu respuesta"
-                  >
-
-                  <button onclick="evaluarEjercicio(${ejercicio.id})">
-                    Responder
-                  </button>
-
-                  <div id="feedback-${ejercicio.id}"></div>
-                `
-            }
-          </div>
-        `;
-      });
-    }
-
-    document.getElementById("listaEjercicios").innerHTML = html;
+    renderizarEjercicios(ejercicios);
 
   } catch (error) {
     console.error("Error al obtener ejercicios:", error);
@@ -551,16 +505,24 @@ async function evaluarEjercicio(id) {
 
     const correcto = normalizarRespuesta(respuestaUsuario) === normalizarRespuesta(respuestaCorrecta);
 
-    if (correcto) {
-      feedback.innerHTML = `<p style="color:#7CFFB2;">Correcto</p>`;
-      mostrarToast("Respuesta correcta", "exito");
-    } else {
-      feedback.innerHTML = `
-        <p style="color:#ff9b9b;">Incorrecto</p>
-        <small>Respuesta: ${escapeHtml(respuestaCorrecta)}</small>
-      `;
-      mostrarToast("Respuesta incorrecta", "error");
-    }
+  if (correcto) {
+  feedback.innerHTML = `
+    <div style="margin-top:10px; padding:12px; background:#103a22; border-radius:10px;">
+      <strong style="color:#7CFFB2;">Correcto</strong>
+      <p style="color:#cfcfcf;">Muy bien. La respuesta coincide con el ejercicio.</p>
+    </div>
+  `;
+  mostrarToast("Respuesta correcta", "exito");
+} else {
+  feedback.innerHTML = `
+    <div style="margin-top:10px; padding:12px; background:#2a1111; border-left:4px solid #ff4d4d; border-radius:10px;">
+      <strong style="color:#ff9b9b;">Incorrecto, pero vas bien.</strong>
+      <p style="color:#ddd;">Respuesta correcta: <b>${escapeHtml(respuestaCorrecta)}</b></p>
+      <p style="color:#bbb;">${generarExplicacionEjercicio(ejercicio, respuestaCorrecta)}</p>
+    </div>
+  `;
+  mostrarToast("Respuesta incorrecta", "error");
+}
 
     await guardarResultadoEjercicio(id, respuestaUsuario, correcto);
 
@@ -571,8 +533,13 @@ async function evaluarEjercicio(id) {
 }
 
 function normalizarRespuesta(texto) {
-  return texto
+  return String(texto)
     .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/-/g, " ")
+    .replace(/,/g, " ")
+    .replace(/\|/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -627,6 +594,7 @@ async function obtenerResultados() {
     const resultados = await response.json();
 
     actualizarEstadisticas(resultados);
+    actualizarProgresoPorNivel(resultados);
 
     const nivelRecomendado = recomendarNivel(resultados);
     document.getElementById("nivelRecomendado").textContent = nivelRecomendado;
@@ -827,7 +795,7 @@ function cargarSesion() {
     const email = localStorage.getItem("email");
     document.getElementById("usuarioLogeado").textContent = email;
 
-    mostrarSeccion("inicioApp");
+    mostrarSeccion("rutaSection");
     obtenerUsuarios();
   }
 }
@@ -851,6 +819,229 @@ function mostrarSeccion(idSeccion) {
   });
 
   document.getElementById(idSeccion).classList.remove("hidden");
+}
+
+// MOSTRAR PISTA
+async function mostrarPista(id) {
+  try {
+    const response = await fetch(`${API_URL}/ejercicios`);
+    const ejercicios = await response.json();
+
+    const ejercicio = ejercicios.find(e => e.id === id);
+    const pistaDiv = document.getElementById(`pista-${id}`);
+
+    if (!ejercicio || !pistaDiv) {
+      mostrarToast("No se pudo cargar la pista", "error");
+      return;
+    }
+
+    let pista = "Lee el ejercicio con calma y observa qué te está pidiendo.";
+
+    if (ejercicio.tipo === "grado") {
+      pista = "Recuerda: un grado en una escala se forma tomando una nota base y saltando una nota entre cada una. Ejemplo: Do - Mi - Sol.";
+    }
+
+    if (ejercicio.tipo === "acordes") {
+      pista = "Observa la progresión como una secuencia. No pienses nota por nota, sino en el orden de los acordes.";
+    }
+
+    if (ejercicio.tipo === "audio") {
+      pista = "Escucha varias veces el audio. Primero identifica si las notas suben, bajan o se mantienen cercanas.";
+    }
+
+    pistaDiv.innerHTML = `
+      <div style="margin-top:10px; padding:12px; background:#111; border-left:4px solid #d4af37; border-radius:10px;">
+        <strong style="color:#d4af37;">Pista:</strong>
+        <p style="color:#ccc;">${pista}</p>
+      </div>
+    `;
+
+  } catch (error) {
+    console.error("Error al mostrar pista:", error);
+    mostrarToast("Error al mostrar pista", "error");
+  }
+}
+
+
+function generarExplicacionEjercicio(ejercicio, respuestaCorrecta) {
+  if (ejercicio.tipo === "grado") {
+    return "En los grados de una escala, se forman acordes tomando una nota base y saltando una nota entre cada sonido. Por eso la respuesta se organiza como una triada.";
+  }
+
+  if (ejercicio.tipo === "acordes") {
+    return "Una progresión de acordes es una secuencia armónica. Lo importante es respetar el orden exacto de los acordes.";
+  }
+
+  if (ejercicio.tipo === "audio") {
+    return "En los ejercicios de audio, escucha varias veces e intenta reconocer si la melodía sube, baja o mantiene un patrón cercano.";
+  }
+
+  return "Revisa el enunciado, compara tu respuesta con la correcta y vuelve a intentarlo.";
+}
+
+
+async function actualizarProgresoPorNivel(resultados) {
+  try {
+    const response = await fetch(`${API_URL}/ejercicios`);
+    const ejercicios = await response.json();
+
+    const progreso = {
+      basico: { total: 0, correctas: 0 },
+      intermedio: { total: 0, correctas: 0 },
+      avanzado: { total: 0, correctas: 0 }
+    };
+
+    resultados.forEach(resultado => {
+      const ejercicio = ejercicios.find(e => e.id === resultado.ejercicioId);
+
+      if (!ejercicio || !ejercicio.nivel) return;
+
+      const nivel = ejercicio.nivel.toLowerCase();
+
+      if (!progreso[nivel]) return;
+
+      progreso[nivel].total++;
+
+      if (resultado.correcto) {
+        progreso[nivel].correctas++;
+      }
+    });
+
+    actualizarTextoProgreso("progresoBasico", progreso.basico);
+    actualizarTextoProgreso("progresoIntermedio", progreso.intermedio);
+    actualizarTextoProgreso("progresoAvanzado", progreso.avanzado);
+
+  } catch (error) {
+    console.error("Error al actualizar progreso por nivel:", error);
+  }
+}
+
+function actualizarTextoProgreso(idElemento, datos) {
+  const total = datos.total;
+  const correctas = datos.correctas;
+  const porcentaje = total > 0 ? Math.round((correctas / total) * 100) : 0;
+
+  document.getElementById(idElemento).textContent = porcentaje + "%";
+}
+
+
+async function cargarNivelRuta(tipo) {
+
+  mostrarSeccion("ejerciciosSection");
+
+  try {
+
+    const response =
+      await fetch(`${API_URL}/ejercicios`);
+
+    const ejercicios =
+      await response.json();
+
+    const ejerciciosFiltrados =
+      ejercicios.filter(e => e.tipo === tipo);
+
+    renderizarEjercicios(ejerciciosFiltrados);
+
+  } catch(error) {
+
+    console.error(error);
+
+    mostrarToast(
+      "Error al cargar ejercicios",
+      "error"
+    );
+  }
+}
+
+
+function renderizarEjercicios(ejercicios) {
+  const lista = document.getElementById("listaEjercicios");
+
+  lista.innerHTML = "";
+
+  if (ejercicios.length === 0) {
+    lista.innerHTML = "<p>No hay ejercicios disponibles.</p>";
+    return;
+  }
+
+  ejercicios.forEach(ejercicio => {
+    lista.innerHTML += `
+      <div class="ejercicio-card">
+        <strong style="color:#d4af37; font-size:20px;">
+          ${escapeHtml(ejercicio.pregunta || "Ejercicio")}
+        </strong>
+
+        ${
+          ejercicio.tipo === "ritmo"
+            ? `
+              <p style="color:#d4af37;">🎵 Practica este patrón con metrónomo</p>
+              ${renderizarRitmo(ejercicio.contenido || "")}
+            `
+            : ejercicio.tipo === "acordes"
+              ? `
+                <p style="color:#d4af37;">🎸 Practica esta progresión con metrónomo</p>
+                ${renderizarAcordes(ejercicio.contenido || "")}
+              `
+              : `
+                <p>${escapeHtml(ejercicio.contenido || "")}</p>
+
+                ${ejercicio.audioUrl ? `
+                  <audio controls style="width:100%; margin-top:14px;">
+                    <source src="${escapeHtml(ejercicio.audioUrl)}" type="audio/mpeg">
+                  </audio>
+                ` : ""}
+
+                <input id="respuesta-${ejercicio.id}" placeholder="Escribe tu respuesta">
+
+                <button onclick="evaluarEjercicio(${ejercicio.id})">Responder</button>
+
+                <button class="secondary" onclick="mostrarPista(${ejercicio.id})">No entiendo</button>
+              `
+        }
+
+        <div id="pista-${ejercicio.id}"></div>
+        <div id="feedback-${ejercicio.id}"></div>
+      </div>
+    `;
+  });
+}
+
+
+function renderizarAcordes(contenido) {
+  if (!contenido || !contenido.includes(":")) {
+    return `
+      <div style="margin-top:10px; padding:10px; background:#111; border-radius:8px;">
+        <p style="color:#d4af37;">${escapeHtml(contenido || "Sin acordes")}</p>
+      </div>
+    `;
+  }
+
+  const partes = contenido.split("|");
+
+  let html = `<div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">`;
+
+  partes.forEach(parte => {
+    if (!parte.includes(":")) return;
+
+    const [acorde, notas] = parte.split(":");
+
+    html += `
+      <div style="
+        background:#111;
+        padding:14px;
+        border-radius:12px;
+        min-width:150px;
+        text-align:center;
+        border:1px solid rgba(212,175,55,0.25);
+      ">
+        <strong style="color:#d4af37;">${escapeHtml(acorde.trim())}</strong>
+        <p style="margin-top:8px; color:#ddd;">${escapeHtml((notas || "").trim())}</p>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  return html;
 }
 
 activarModoCrear();

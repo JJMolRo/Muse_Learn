@@ -502,12 +502,211 @@
         <button onclick="mostrarSeccion('metronomoSection')">Metrónomo</button>
         <button onclick="mostrarSeccion('ejerciciosSection')">Ejercicios</button>
         <button onclick="mostrarSeccion('resultadosSection')">Resultados</button>
+        <button onclick="mostrarSeccion('rutaSection')">Ruta de aprendizaje</button>
+        <button onclick="mostrarSeccion('rutaSection')">Ruta de aprendizaje</button>
+  
+
+        
+  
+
       </nav>
 
       <main class="app-content">
+        <section id="rutaSection" class="card app-section hidden">
+
+  <h2 class="section-title">
+    Ruta de aprendizaje
+  </h2>
+
+  <p>
+    Sigue esta ruta paso a paso para aprender música desde cero.
+    Cada nivel desbloquea nuevas habilidades musicales.
+  </p>
+
+  <div class="ruta-grid">
+
+    <div class="ruta-card completado">
+
+      <div class="ruta-top">
+        <span>NIVEL 1</span>
+        <small>Fundamentos</small>
+      </div>
+
+      <h3>¿Qué es una nota?</h3>
+
+      <p>
+        Aprende qué son las notas musicales,
+        cómo identificarlas y cómo funcionan.
+      </p>
+
+      <button onclick="cargarNivelRuta('notas')">
+        Empezar nivel
+      </button>
+
+    </div>
+
+    <div class="ruta-card">
+
+      <div class="ruta-top">
+        <span>NIVEL 2</span>
+        <small>Ritmo</small>
+      </div>
+
+      <h3>Ritmo básico</h3>
+
+      <p>
+        Aprende figuras musicales,
+        pulsos y práctica con metrónomo.
+      </p>
+
+      <button onclick="cargarNivelRuta('ritmo')">
+        Practicar ritmo
+      </button>
+
+    </div>
+
+    <div class="ruta-card">
+
+      <div class="ruta-top">
+        <span>NIVEL 3</span>
+        <small>Escalas</small>
+      </div>
+
+      <h3>Escala mayor</h3>
+
+      <p>
+        Comprende cómo se construyen las escalas
+        y los grados musicales.
+      </p>
+
+      <button onclick="cargarNivelRuta('escala')">
+        Aprender escalas
+      </button>
+
+    </div>
+
+    <div class="ruta-card">
+
+      <div class="ruta-top">
+        <span>NIVEL 4</span>
+        <small>Armonía</small>
+      </div>
+
+      <h3>Acordes</h3>
+
+      <p>
+        Aprende a construir acordes
+        y reconocer su estructura.
+      </p>
+
+      <button onclick="cargarNivelRuta('acordes')">
+        Ver acordes
+      </button>
+
+    </div>
+
+    <div class="ruta-card">
+
+      <div class="ruta-top">
+        <span>NIVEL 5</span>
+        <small>Progresiones</small>
+      </div>
+
+      <h3>Progresiones armónicas</h3>
+
+      <p>
+        Relaciona acordes para construir
+        secuencias musicales.
+      </p>
+
+      <button onclick="cargarNivelRuta('progresiones')">
+        Explorar progresiones
+      </button>
+
+    </div>
+
+    <div class="ruta-card bloqueado">
+
+      <div class="ruta-top">
+        <span>NIVEL 6</span>
+        <small>Creatividad</small>
+      </div>
+
+      <h3>Composición sencilla</h3>
+
+      <p>
+        Combina ritmo, melodía y armonía
+        para crear ideas musicales.
+      </p>
+
+      <button disabled>
+        Próximamente
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
         <!-- INICIO INTERNO -->
         <section id="inicioApp" class="card app-section">
+          <section id="rutaSection" class="card app-section hidden">
+
+  <h2 class="section-title">
+    Ruta de aprendizaje
+  </h2>
+
+  <p>
+    Sigue esta ruta para avanzar desde conceptos básicos
+    hasta ejercicios de composición musical.
+  </p>
+
+  <div class="ruta-grid">
+
+    <div class="ruta-card completado">
+      <span>✓ COMPLETADO</span>
+      <h3>Nivel 1 — Ritmo básico</h3>
+      <p>
+        Aprende figuras musicales y práctica con metrónomo.
+      </p>
+    </div>
+
+    <div class="ruta-card">
+      <span>EN PROGRESO</span>
+      <h3>Nivel 2 — Notas musicales</h3>
+      <p>
+        Reconoce notas y patrones melódicos simples.
+      </p>
+    </div>
+
+    <div class="ruta-card">
+      <span>BLOQUEADO</span>
+      <h3>Nivel 3 — Escala mayor</h3>
+      <p>
+        Comprende cómo se forman las escalas musicales.
+      </p>
+    </div>
+
+    <div class="ruta-card">
+      <span>BLOQUEADO</span>
+      <h3>Nivel 4 — Acordes</h3>
+      <p>
+        Aprende triadas y construcción armónica básica.
+      </p>
+    </div>
+
+    <div class="ruta-card">
+      <span>BLOQUEADO</span>
+      <h3>Nivel 5 — Progresiones</h3>
+      <p>
+        Construye secuencias armónicas musicales.
+      </p>
+    </div>
+
+  </div>
+
+</section>
           <h2 class="section-title">Bienvenido a MuseLearn</h2>
           <p>
             Este panel reúne las herramientas principales del prototipo: gestión de usuarios, metrónomo,
@@ -648,6 +847,23 @@
       </div>
     </div>
   </div>
+
+  <div class="resumen-dashboard">
+  <div class="resumen-card">
+    <span>Progreso básico</span>
+    <strong id="progresoBasico">0%</strong>
+  </div>
+
+  <div class="resumen-card">
+    <span>Progreso intermedio</span>
+    <strong id="progresoIntermedio">0%</strong>
+  </div>
+
+  <div class="resumen-card">
+    <span>Progreso avanzado</span>
+    <strong id="progresoAvanzado">0%</strong>
+  </div>
+</div>
 
   <script src="app.js"></script>
 

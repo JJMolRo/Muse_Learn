@@ -447,6 +447,99 @@ button.danger {
   justify-content: center;
 }
 
+.ruta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+  margin-top: 25px;
+}
+
+.ruta-card {
+  background: #0f131a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 18px;
+  padding: 20px;
+  transition: 0.2s ease;
+}
+
+.ruta-card:hover {
+  transform: translateY(-3px);
+}
+
+.ruta-card span {
+  font-size: 12px;
+  color: #d4af37;
+  font-weight: bold;
+}
+
+.ruta-card h3 {
+  margin-top: 12px;
+  margin-bottom: 10px;
+}
+
+.ruta-card p {
+  color: #aaa;
+  line-height: 1.5;
+}
+
+.completado {
+  border-color: #00cc6a;
+}
+
+.ruta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.ruta-card {
+  background: #0f131a;
+  border-radius: 20px;
+  padding: 22px;
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: 0.25s ease;
+}
+
+.ruta-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(212,175,55,0.35);
+}
+
+.ruta-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ruta-top span {
+  color: #d4af37;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.ruta-top small {
+  color: #888;
+}
+
+.ruta-card h3 {
+  margin-top: 18px;
+  margin-bottom: 12px;
+}
+
+.ruta-card p {
+  color: #aaa;
+  line-height: 1.6;
+}
+
+.completado {
+  border-color: #00cc6a;
+}
+
+.bloqueado {
+  opacity: 0.6;
+}
+
 
 
 
